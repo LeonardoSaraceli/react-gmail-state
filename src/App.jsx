@@ -10,6 +10,7 @@ function App() {
 
   const [emails, setEmails] = useState(initialEmails)
   const [hideRead, setHideRead] = useState(false)
+  const [currentTab, setCurrentTab] = useState('inbox')
 
   function toggleRead(id) {
     setEmails(emails.map(email => {
@@ -34,9 +35,13 @@ function App() {
   function getReadEmails() {
     if (hideRead) {
       return emails.filter(email => !email.read)
-    } else {
-      return emails
+    } 
+
+    if (currentTab === 'starred') {
+      return emails.filter(email => email.starred)
     }
+    
+    return emails
   }
 
   function createEmails(email) {
@@ -82,22 +87,21 @@ function App() {
       <nav className="left-menu">
         <ul className="inbox-list">
           <li
-            className="item active"
-            // onClick={() => {}}
+            className={`item ${currentTab === 'inbox' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('inbox')}
           >
             <span className="label">Inbox</span>
-            <span className="count">?</span>
+            <span className="count">{emails.filter(email => !email.read).length}</span>
           </li>
           <li
-            className="item"
-            // onClick={() => {}}
+            className={`item ${currentTab === 'starred' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('starred')}
           >
             <span className="label">Starred</span>
-            <span className="count">?</span>
+            <span className="count">{emails.filter(email => email.starred).length}</span>
           </li>
-
           <li className="item toggle">
-            <label for="hide-read">Hide read</label>
+            <label htmlFor="hide-read">Hide read</label>
             <input
               id="hide-read"
               type="checkbox"
