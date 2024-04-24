@@ -9,6 +9,7 @@ function App() {
   console.log(initialEmails)
 
   const [emails, setEmails] = useState(initialEmails)
+  const [hideRead, setHideRead] = useState(false)
 
   function toggleRead(id) {
     setEmails(emails.map(email => {
@@ -28,6 +29,14 @@ function App() {
         return email
       }
     }))
+  }
+
+  function getReadEmails() {
+    if (hideRead) {
+      return emails.filter(email => !email.read)
+    } else {
+      return emails
+    }
   }
 
   function createEmails(email) {
@@ -64,7 +73,7 @@ function App() {
   }
 
   function renderEmails() {
-    return emails.map(email => createEmails(email))
+    return getReadEmails().map(email => createEmails(email))
   }
 
   return (
@@ -92,8 +101,8 @@ function App() {
             <input
               id="hide-read"
               type="checkbox"
-              checked={false}
-              // onChange={() => {}}
+              checked={hideRead}
+              onChange={() => setHideRead(!hideRead)}
             />
           </li>
         </ul>
